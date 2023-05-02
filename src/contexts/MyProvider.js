@@ -5,6 +5,7 @@ import MyContext from './MyContext';
 function Provider({ children }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [inputName, setInputName] = useState('');
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -17,7 +18,10 @@ function Provider({ children }) {
     fetchAPI();
     setLoading(false);
   }, []);
-  const ContextValues = { data, loading };
+  const ContextValues = { data,
+    loading,
+    inputName,
+    setInputName };
   return (
     <MyContext.Provider value={ ContextValues }>
       {children}
