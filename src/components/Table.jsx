@@ -1,13 +1,45 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import MyContext from '../contexts/MyContext';
 
 function Table() {
-  const { data, inputName, setInputName } = useContext(MyContext);
+  const { data, inputName, setInputName, sizeFilter,
+    columFilter, number, setNumber, setSizeFilter,
+    setColumFilter } = useContext(MyContext);
+  const [initialStateApi, setInitialApi] = useState([]);
+
+  useEffect(() => {
+    setInitialApi([...data]);
+  }, [data]);
+
   const handleChange = ({ target }) => {
     const { name, value } = target;
     switch (name) {
     case 'inputName':
       return setInputName(value);
+    case 'columFilter':
+      return setColumFilter(value);
+    case 'sizeFilter':
+      return setSizeFilter(value);
+    case 'number':
+      return setNumber(value);
+    default:
+    }
+  };
+
+  const toggleFilter = () => {
+    switch (sizeFilter) {
+    case 'maior que':
+      return (
+        setInitialApi(data.filter((e) => Number(e[columFilter]) > Number(number)))
+      );
+    case 'menor que':
+      return (
+        setInitialApi(data.filter((e) => Number(e[columFilter]) < Number(number)))
+      );
+    case 'igual que':
+      return (
+        setInitialApi(data.filter((e) => Number(e[columFilter]) === Number(number)))
+      );
     default:
     }
   };
@@ -15,7 +47,7 @@ function Table() {
   return (
     <div>
       <label htmlFor="inputName">
-        Name
+        Name Planet
         <input
           type="text"
           name="inputName"
@@ -24,6 +56,49 @@ function Table() {
           onChange={ handleChange }
         />
       </label>
+      <form>
+
+        <select
+          data-testid="column-filter"
+          name="columFilter"
+          onChange={ handleChange }
+          value={ columFilter }
+        >
+          <option value="population">population</option>
+          <option value="orbital_period">orbital_period</option>
+          <option value="diameter"> diameter</option>
+          <option value="rotation_period">rotation_period</option>
+          <option value="surface_water">surface_water</option>
+        </select>
+        <select
+          name="sizeFilter"
+          data-testid="comparison-filter"
+          onChange={ handleChange }
+          value={ sizeFilter }
+        >
+          <option value="maior que">maior que</option>
+          <option value="menor que">menor que</option>
+          <option value="igual a"> igual a</option>
+        </select>
+        <label>
+          Value:
+          <input
+            type="number"
+            name="number"
+            value={ number }
+            data-testid="value-filter"
+            onChange={ handleChange }
+          />
+        </label>
+      </form>
+
+      <button
+        data-testid="button-filter"
+        onClick={ toggleFilter }
+
+      >
+        Aplicar filtro
+      </button>
       <table>
         <thead>
           <tr>
@@ -44,7 +119,7 @@ function Table() {
         </thead>
         <tbody>
           {
-            data
+            initialStateApi
               .filter((item) => item.name.toLowerCase().includes(inputName))
               .map((e) => (
                 <tr key={ e.name }>
@@ -63,7 +138,9 @@ function Table() {
                   <td>{ e.url }</td>
                 </tr>
               ))
+
           }
+
         </tbody>
 
       </table>

@@ -6,6 +6,9 @@ function Provider({ children }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [inputName, setInputName] = useState('');
+  const [columFilter, setColumFilter] = useState('population');
+  const [sizeFilter, setSizeFilter] = useState('maior que');
+  const [number, setNumber] = useState(0);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -18,10 +21,19 @@ function Provider({ children }) {
     fetchAPI();
     setLoading(false);
   }, []);
+
   const ContextValues = { data,
     loading,
     inputName,
-    setInputName };
+    setInputName,
+    columFilter,
+    setColumFilter,
+    sizeFilter,
+    setSizeFilter,
+    number,
+    setNumber,
+
+  };
   return (
     <MyContext.Provider value={ ContextValues }>
       {children}
