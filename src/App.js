@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './App.css';
+import Table from './components/Table';
+import MyContext from './contexts/MyContext';
 
 function App() {
+  const { loading } = useContext(MyContext);
   return (
-    <span>Hello, App! </span>
+    <div>
+      { loading ? <p> Loading...</p> : (
+        <Table />
+      ) }
+
+    </div>
   );
 }
 
