@@ -27,6 +27,34 @@ function Table() {
     default:
     }
   };
+  // const deleteAllFilters = () => {
+  //   setOptionSelect(['population', 'orbital_period',
+  //     'diameter', 'rotation_period', 'surface_water']);
+  //   setInitialApi(initialStateApi);
+  //   setFiltersApplied([]);
+  // };
+  // const deleteOptionFilters = ((colum) => { // função para retornar as opções no select.
+  //   const newApi = [...data];
+  //   const removeOptionFilters = filtersApplied.map((map) => map)
+  //     .filter((filter) => filter.columFilter !== colum); // dentro do meu array de filtros eu quero filtrar o que está diferente colum.
+  //   setFiltersApplied([...removeOptionFilters]);
+  //   optionsSelect.push(colum);
+
+  //   removeOptionFilters.forEach((filter) => {
+  //     if (filter.columFilter === 'maior que') {
+  //       newAPi = newApi
+  //         .filter((item) => Number(item[filter.columFilter]) > Number(filter.number));
+  //     }
+  //     if (filter.columFilter === 'menor que') {
+  //       newAPi = newApi
+  //         .filter((item) => Number(item[filter.columFilter]) < Number(filter.number));
+  //     }
+  //     if (filter.columFilter === 'igual a') {
+  //       newAPi = newApi
+  //         .filter((item) => Number(item[filter.columFilter]) === Number(filter.number));
+  //     }
+  //   });
+  // });
 
   const toggleFilter = () => {
     setOptionSelect(optionsSelect.filter((option) => option !== columFilter));
@@ -52,22 +80,21 @@ function Table() {
       );
     default:
     }
-    handleFilters();
   };
 
   return (
     <div>
-      <label htmlFor="inputName">
-        Nome Planeta
-        <input
-          type="text"
-          name="inputName"
-          value={ inputName }
-          data-testid="name-filter"
-          onChange={ handleChange }
-        />
-      </label>
       <form>
+        <label htmlFor="inputName">
+          Nome Planeta
+          <input
+            type="text"
+            name="inputName"
+            value={ inputName }
+            data-testid="name-filter"
+            onChange={ handleChange }
+          />
+        </label>
         <label>
           Column:
           <select
@@ -107,15 +134,35 @@ function Table() {
             onChange={ handleChange }
           />
         </label>
+
+        <button
+          data-testid="button-filter"
+          onClick={ toggleFilter }
+
+        >
+          Aplicar filtro
+        </button>
+        <button
+          type="button"
+          data-testid="button-remove-filters"
+          // onClick={ deleteAllFilters }
+        >
+          Excluir filtros
+        </button>
+        {
+          filtersApplied.length > 0 && filtersApplied.map((e) => (
+            <p data-testid="filter" key={ e.columnFilter }>
+              {`${e.columnFilter} ${e.sizeFilter} ${e.number}`}
+              <button
+                type="button"
+                // onClick={ () => { deleteOptionFilters(filtersApplied.columFilter); } }
+              >
+                Excluir.
+              </button>
+            </p>
+          ))
+        }
       </form>
-
-      <button
-        data-testid="button-filter"
-        onClick={ toggleFilter }
-
-      >
-        Aplicar filtro
-      </button>
       <table>
         <thead>
           <tr>
