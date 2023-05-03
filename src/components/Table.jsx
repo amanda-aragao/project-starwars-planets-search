@@ -4,7 +4,7 @@ import MyContext from '../contexts/MyContext';
 function Table() {
   const { data, inputName, setInputName, sizeFilter,
     columFilter, number, setNumber, setSizeFilter,
-    setColumFilter } = useContext(MyContext);
+    setColumFilter, setFilters } = useContext(MyContext);
   const [initialStateApi, setInitialApi] = useState([]);
 
   useEffect(() => {
@@ -26,22 +26,31 @@ function Table() {
     }
   };
 
+  const handleDeleteFilters = () => {
+    setInitialApi(initialStateApi);
+    setFilters([]);
+  };
+
   const toggleFilter = () => {
     switch (sizeFilter) {
     case 'maior que':
       return (
-        setInitialApi(data.filter((e) => Number(e[columFilter]) > Number(number)))
+        setInitialApi(initialStateApi
+          .filter((e) => Number(e[columFilter]) > Number(number)))
       );
     case 'menor que':
       return (
-        setInitialApi(data.filter((e) => Number(e[columFilter]) < Number(number)))
+        setInitialApi(initialStateApi
+          .filter((e) => Number(e[columFilter]) < Number(number)))
       );
-    case 'igual que':
+    case 'igual a':
       return (
-        setInitialApi(data.filter((e) => Number(e[columFilter]) === Number(number)))
+        setInitialApi(initialStateApi
+          .filter((e) => Number(e[columFilter]) === Number(number)))
       );
     default:
     }
+    handleDeleteFilters();
   };
 
   return (

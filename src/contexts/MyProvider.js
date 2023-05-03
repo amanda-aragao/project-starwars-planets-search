@@ -9,6 +9,7 @@ function Provider({ children }) {
   const [columFilter, setColumFilter] = useState('population');
   const [sizeFilter, setSizeFilter] = useState('maior que');
   const [number, setNumber] = useState(0);
+  const [filters, setFilters] = useState([]);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -32,6 +33,8 @@ function Provider({ children }) {
     setSizeFilter,
     number,
     setNumber,
+    filters,
+    setFilters,
 
   };
   return (
