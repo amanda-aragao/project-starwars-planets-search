@@ -32,9 +32,16 @@ function Table() {
     }
   };
 
-  const handleDeleteOption = useCallback((column) => {
+  const deleteOption = () => {
+    setOptionSelect(['population', 'orbital_period',
+      'diameter', 'rotation_period', 'surface_water']);
+    setInitialApi(initialStateApi);
+    setFiltersApplied([]);
+  };
+
+  const deleteOptionSelection = useCallback((column) => {
     const filterApi = filtersApplied.map((map) => map)
-      .filter((filter) => filter.columnFilter !== column);
+      .filter((filter) => filter.columFilter !== column);
     setFiltersApplied([...filterApi]);
     optionsSelect.push(column);
 
@@ -53,7 +60,7 @@ function Table() {
           < Number(filter.number));
       }
 
-      if (filter.compareFilter === '') {
+      if (filter.compareFilter === 'igual a') {
         newApi = newApi
           .filter((item) => Number(item[filter.columnFilter])
           === Number(filter.number));
@@ -151,19 +158,19 @@ function Table() {
         <button
           type="button"
           data-testid="button-remove-filters"
-          // onClick={ deleteAllFilters }
+          onClick={ deleteOption }
         >
           Excluir filtros
         </button>
         {
           filtersApplied.length > 0 && filtersApplied.map((e) => (
-            <p data-testid="filter" key={ e.columnFilter }>
+            <p data-testid="filter" key={ e.columFilter }>
               {`${e.columFilter} ${e.sizeFilter} ${e.number}`}
               <button
                 type="button"
-                onClick={ () => { handleDeleteOption(e.columFilter); } }
+                onClick={ () => { deleteOptionSelection(e.columFilter); } }
               >
-                Excluir.
+                Excluir
               </button>
             </p>
           ))

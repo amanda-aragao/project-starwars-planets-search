@@ -12,6 +12,7 @@ function Provider({ children }) {
   const [filters, setFilters] = useState([]);
   const [optionsSelect, setOptionSelect] = useState(['population', 'orbital_period',
     'diameter', 'rotation_period', 'surface_water']);
+  const [ascOption, setAscOption] = useState('ASC');
 
   // useEffect(() => {
   //   setColumFilter(optionsSelect[0]);
@@ -44,6 +45,8 @@ function Provider({ children }) {
       setFilters,
       optionsSelect,
       setOptionSelect,
+      ascOption,
+      setAscOption,
     }
   ), [data,
     loading,
@@ -58,7 +61,9 @@ function Provider({ children }) {
     filters,
     setFilters,
     optionsSelect,
-    setOptionSelect]);
+    setOptionSelect,
+    ascOption,
+    setAscOption]);
   return (
     <MyContext.Provider value={ ContextValues }>
       {children}
