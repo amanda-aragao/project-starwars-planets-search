@@ -14,7 +14,6 @@ function Table() {
   }, [data, setInitialApi]);
 
   useEffect(() => {
-    console.log(initialStateApi);
     setColumFilter(optionsSelect[0]);
   }, [optionsSelect, setColumFilter]);
 
