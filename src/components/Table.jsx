@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import MyContext from '../contexts/MyContext';
 
 function Table() {
@@ -11,7 +11,11 @@ function Table() {
 
   useEffect(() => {
     setInitialApi([...data]);
-  }, [data]);
+  }, [data, setInitialApi]);
+
+  useEffect(() => {
+    setColumFilter(optionsSelect[0]);
+  }, [optionsSelect, setColumFilter]);
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
@@ -27,34 +31,37 @@ function Table() {
     default:
     }
   };
-  // const deleteAllFilters = () => {
-  //   setOptionSelect(['population', 'orbital_period',
-  //     'diameter', 'rotation_period', 'surface_water']);
-  //   setInitialApi(initialStateApi);
-  //   setFiltersApplied([]);
-  // };
-  // const deleteOptionFilters = ((colum) => { // função para retornar as opções no select.
-  //   const newApi = [...data];
-  //   const removeOptionFilters = filtersApplied.map((map) => map)
-  //     .filter((filter) => filter.columFilter !== colum); // dentro do meu array de filtros eu quero filtrar o que está diferente colum.
-  //   setFiltersApplied([...removeOptionFilters]);
-  //   optionsSelect.push(colum);
 
-  //   removeOptionFilters.forEach((filter) => {
-  //     if (filter.columFilter === 'maior que') {
-  //       newAPi = newApi
-  //         .filter((item) => Number(item[filter.columFilter]) > Number(filter.number));
-  //     }
-  //     if (filter.columFilter === 'menor que') {
-  //       newAPi = newApi
-  //         .filter((item) => Number(item[filter.columFilter]) < Number(filter.number));
-  //     }
-  //     if (filter.columFilter === 'igual a') {
-  //       newAPi = newApi
-  //         .filter((item) => Number(item[filter.columFilter]) === Number(filter.number));
-  //     }
-  //   });
-  // });
+  const handleDeleteOption = useCallback((column) => {
+    const filterApi = filtersApplied.map((map) => map)
+      .filter((filter) => filter.columnFilter !== column);
+    setFiltersApplied([...filterApi]);
+    optionsSelect.push(column);
+
+    let newApi = [...data];
+
+    filterApi.forEach((filter) => {
+      if (filter.compareFilter === 'maior que') {
+        newApi = newApi
+          .filter((item) => Number(item[filter.columnFilter])
+          > Number(filter.number));
+      }
+
+      if (filter.compareFilter === 'menor que') {
+        newApi = newApi
+          .filter((item) => Number(item[filter.columnFilter])
+          < Number(filter.number));
+      }
+
+      if (filter.compareFilter === '') {
+        newApi = newApi
+          .filter((item) => Number(item[filter.columnFilter])
+          === Number(filter.number));
+      }
+    });
+
+    setInitialApi([...newApi]);
+  }, [optionsSelect, filtersApplied, data, setInitialApi]);
 
   const toggleFilter = () => {
     setOptionSelect(optionsSelect.filter((option) => option !== columFilter));
@@ -66,7 +73,6 @@ function Table() {
         setFiltersApplied([...filtersApplied, { columFilter, sizeFilter, number }])
       );
     case 'menor que':
-
       return (
         setInitialApi(initialStateApi
           .filter((e) => Number(e[columFilter]) < Number(number))),
@@ -104,8 +110,8 @@ function Table() {
             value={ columFilter }
           >
             {
-              optionsSelect.map((option) => (
-                <option key={ option } value={ option }>{option}</option>
+              optionsSelect.map((e) => (
+                <option key={ e } value={ e }>{e}</option>
               ))
             }
           </select>
@@ -121,7 +127,7 @@ function Table() {
           >
             <option value="maior que">maior que</option>
             <option value="menor que">menor que</option>
-            <option value="igual a"> igual a</option>
+            <option value="igual a">igual a</option>
           </select>
         </label>
         <label>
@@ -136,9 +142,9 @@ function Table() {
         </label>
 
         <button
+          type="button"
           data-testid="button-filter"
           onClick={ toggleFilter }
-
         >
           Aplicar filtro
         </button>
@@ -152,10 +158,10 @@ function Table() {
         {
           filtersApplied.length > 0 && filtersApplied.map((e) => (
             <p data-testid="filter" key={ e.columnFilter }>
-              {`${e.columnFilter} ${e.sizeFilter} ${e.number}`}
+              {`${e.columFilter} ${e.sizeFilter} ${e.number}`}
               <button
                 type="button"
-                // onClick={ () => { deleteOptionFilters(filtersApplied.columFilter); } }
+                onClick={ () => { handleDeleteOption(e.columFilter); } }
               >
                 Excluir.
               </button>
@@ -202,7 +208,6 @@ function Table() {
                   <td>{ e.url }</td>
                 </tr>
               ))
-
           }
 
         </tbody>

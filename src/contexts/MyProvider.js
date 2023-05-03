@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import MyContext from './MyContext';
 
@@ -13,9 +13,9 @@ function Provider({ children }) {
   const [optionsSelect, setOptionSelect] = useState(['population', 'orbital_period',
     'diameter', 'rotation_period', 'surface_water']);
 
-  useEffect(() => {
-    setColumFilter(optionsSelect[0]);
-  }, [optionsSelect]);
+  // useEffect(() => {
+  //   setColumFilter(optionsSelect[0]);
+  // }, [optionsSelect]);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -29,7 +29,23 @@ function Provider({ children }) {
     setLoading(false);
   }, []);
 
-  const ContextValues = { data,
+  const ContextValues = useMemo(() => (
+    { data,
+      loading,
+      inputName,
+      setInputName,
+      columFilter,
+      setColumFilter,
+      sizeFilter,
+      setSizeFilter,
+      number,
+      setNumber,
+      filters,
+      setFilters,
+      optionsSelect,
+      setOptionSelect,
+    }
+  ), [data,
     loading,
     inputName,
     setInputName,
@@ -42,8 +58,7 @@ function Provider({ children }) {
     filters,
     setFilters,
     optionsSelect,
-    setOptionSelect,
-  };
+    setOptionSelect]);
   return (
     <MyContext.Provider value={ ContextValues }>
       {children}
