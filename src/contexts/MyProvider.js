@@ -10,6 +10,12 @@ function Provider({ children }) {
   const [sizeFilter, setSizeFilter] = useState('maior que');
   const [number, setNumber] = useState(0);
   const [filters, setFilters] = useState([]);
+  const [optionsSelect, setOptionSelect] = useState(['population', 'orbital_period',
+    'diameter', 'rotation_period', 'surface_water']);
+
+  useEffect(() => {
+    setColumFilter(optionsSelect[0]);
+  }, [optionsSelect]);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -35,7 +41,8 @@ function Provider({ children }) {
     setNumber,
     filters,
     setFilters,
-
+    optionsSelect,
+    setOptionSelect,
   };
   return (
     <MyContext.Provider value={ ContextValues }>
