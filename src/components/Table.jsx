@@ -14,6 +14,7 @@ function Table() {
   }, [data, setInitialApi]);
 
   useEffect(() => {
+    console.log(initialStateApi);
     setColumFilter(optionsSelect[0]);
   }, [optionsSelect, setColumFilter]);
 
@@ -35,34 +36,34 @@ function Table() {
   const deleteOption = () => {
     setOptionSelect(['population', 'orbital_period',
       'diameter', 'rotation_period', 'surface_water']);
-    setInitialApi(initialStateApi);
+    setInitialApi([...data]);
     setFiltersApplied([]);
   };
 
   const deleteOptionSelection = useCallback((column) => {
-    const filterApi = filtersApplied.map((map) => map)
-      .filter((filter) => filter.columFilter !== column);
+    const filterApi = [...filtersApplied
+      .filter((filter) => filter.columFilter !== column)];
     setFiltersApplied([...filterApi]);
     optionsSelect.push(column);
 
     let newApi = [...data];
 
     filterApi.forEach((filter) => {
-      if (filter.compareFilter === 'maior que') {
+      if (filter.sizeFilter === 'maior que') {
         newApi = newApi
-          .filter((item) => Number(item[filter.columnFilter])
+          .filter((item) => Number(item[filter.columFilter])
           > Number(filter.number));
       }
 
-      if (filter.compareFilter === 'menor que') {
+      if (filter.sizeFilter === 'menor que') {
         newApi = newApi
-          .filter((item) => Number(item[filter.columnFilter])
+          .filter((item) => Number(item[filter.columFilter])
           < Number(filter.number));
       }
 
-      if (filter.compareFilter === 'igual a') {
+      if (filter.sizeFilter === 'igual a') {
         newApi = newApi
-          .filter((item) => Number(item[filter.columnFilter])
+          .filter((item) => Number(item[filter.columFilter])
           === Number(filter.number));
       }
     });
@@ -164,15 +165,18 @@ function Table() {
         </button>
         {
           filtersApplied.length > 0 && filtersApplied.map((e) => (
-            <p data-testid="filter" key={ e.columFilter }>
-              {`${e.columFilter} ${e.sizeFilter} ${e.number}`}
+            <div data-testid="filter" key={ e.columFilter }>
+
+              <p>
+                {`${e.columFilter} ${e.sizeFilter} ${e.number}`}
+              </p>
               <button
                 type="button"
                 onClick={ () => { deleteOptionSelection(e.columFilter); } }
               >
                 Excluir
               </button>
-            </p>
+            </div>
           ))
         }
       </form>
