@@ -39,9 +39,9 @@ function Provider({ children }) {
       const dataApi = await response.json();
       const newData = dataApi.results;
       setData(newData);
+      setLoading(false);
     };
     fetchAPI();
-    setLoading(false);
   }, []);
 
   const ContextValues = useMemo(() => (

@@ -7,7 +7,7 @@ function App() {
   const { loading } = useContext(MyContext);
   return (
     <div>
-      { loading ? <p> Loading...</p> : (
+      { loading ? <p> Carregando...</p> : (
         <Table />
       ) }
 

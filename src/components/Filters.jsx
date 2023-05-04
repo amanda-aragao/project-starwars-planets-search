@@ -2,23 +2,19 @@ import React, { useContext } from 'react';
 import MyContext from '../contexts/MyContext';
 
 function Filters() {
-  const { chooseOrdination, sortOption } = useContext(MyContext);
-
-  const handleChange = ({ target }) => {
-    const { name, value } = target;
-    console.log(name, value);
-  };
+  const { chooseOrdination, sortOption, handleChange,
+    setSortOption } = useContext(MyContext);
 
   return (
     <div name="sortOptionsOrder" value={ sortOption } onChange={ handleChange }>
       <label>
         Ascendente
         <input
-          defaultChecked
           type="radio"
           value="ASC"
           name="sortOptionsOrder"
           data-testid="column-sort-input-asc"
+          onChange={ ({ target }) => setSortOption(target.value) }
         />
       </label>
 
@@ -29,6 +25,7 @@ function Filters() {
           value="DESC"
           name="sortOptionsOrder"
           data-testid="column-sort-input-desc"
+          onChange={ ({ target }) => setSortOption(target.value) }
         />
       </label>
       <button

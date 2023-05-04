@@ -101,7 +101,7 @@ function Table() {
     <div>
       <form>
         <label htmlFor="inputName">
-          Nome Planeta
+          Planeta
           <input
             type="text"
             name="inputName"
@@ -111,7 +111,7 @@ function Table() {
           />
         </label>
         <label>
-          Column:
+          Coluna
           <select
             data-testid="column-filter"
             name="columFilter"
@@ -127,7 +127,7 @@ function Table() {
         </label>
 
         <label>
-          Operador:
+          Operador
           <select
             name="sizeFilter"
             data-testid="comparison-filter"
@@ -140,7 +140,7 @@ function Table() {
           </select>
         </label>
         <label>
-          Value:
+          Valor
           <input
             type="number"
             name="number"
@@ -202,7 +202,7 @@ function Table() {
         <tbody>
           {
             initialStateApi
-              .filter((item) => item.name.toLowerCase().includes(inputName))
+              .filter((item) => item.name.toLowerCase().includes(inputName.toLowerCase()))
               .map((e) => (
                 <tr key={ e.name }>
                   <td data-testid="planet-name">{ e.name }</td>
