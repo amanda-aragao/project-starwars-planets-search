@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import MyContext from './MyContext';
 
@@ -12,11 +12,25 @@ function Provider({ children }) {
   const [filters, setFilters] = useState([]);
   const [optionsSelect, setOptionSelect] = useState(['population', 'orbital_period',
     'diameter', 'rotation_period', 'surface_water']);
-  const [ascOption, setAscOption] = useState('ASC');
+  const [sortOption, setSortOption] = useState('ASC');
+  const [filtersApplied, setFiltersApplied] = useState([]);
 
-  // useEffect(() => {
-  //   setColumFilter(optionsSelect[0]);
-  // }, [optionsSelect]);
+  const chooseOrdination = useCallback(() => {
+    if (sortOption.includes('ASC')) {
+      const notExist = data.filter((e) => e[columFilter] === 'unknown');
+      const exist = data.filter((e) => e[columFilter] !== 'unknown');
+      const arrayAsyc = exist
+        .sort((a, b) => Number(a[columFilter] - Number(b[columFilter])));
+      setData([...arrayAsyc, ...notExist]);
+      setFilters([...filtersApplied, { columFilter, sortOption }]);
+    } else if (sortOption.includes('DESC')) {
+      const notExist = data.filter((e) => e[columFilter] === 'unknown');
+      const exist = data.filter((e) => e[columFilter] !== 'unknown');
+      const arrayAsync = exist.sort((a, b) => Number(b[columFilter] - a[columFilter]));
+      setData([...arrayAsync, ...notExist]);
+      setFilters([...filtersApplied, { columFilter, sortOption }]);
+    }
+  }, [data, columFilter, sortOption, filtersApplied]);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -45,8 +59,10 @@ function Provider({ children }) {
       setFilters,
       optionsSelect,
       setOptionSelect,
-      ascOption,
-      setAscOption,
+      sortOption,
+      setSortOption,
+      chooseOrdination,
+      setFiltersApplied,
     }
   ), [data,
     loading,
@@ -62,8 +78,9 @@ function Provider({ children }) {
     setFilters,
     optionsSelect,
     setOptionSelect,
-    ascOption,
-    setAscOption]);
+    sortOption,
+    setSortOption,
+    chooseOrdination]);
   return (
     <MyContext.Provider value={ ContextValues }>
       {children}

@@ -1,19 +1,44 @@
-// import React, { useContext, useState, useEffect, useCallback } from 'react';
-// import MyContext from '../contexts/MyContext';
+import React, { useContext } from 'react';
+import MyContext from '../contexts/MyContext';
 
-// const Filters = (() => {
-//   const { ascOption,
-//     setAscOption, columFilter, data, setData } = useContext(MyContext);
+function Filters() {
+  const { chooseOrdination, sortOption } = useContext(MyContext);
 
-//   const chooseOrdination = useCallback(() => {
-//     if (ascOption.includes('ASC')) {
-//       const notExist = data.filter((e) => e[columFilter] === null);
-//       const exist = data.filter((e) => e[columFilter] !== null);
-//       const arrayAsyc = exist
-//         .sort((a, b) => Number(a[columFilter] - Number(b[columFilter])));
-//         setData([...arrayAsyc]);
+  const handleChange = ({ target }) => {
+    const { name, value } = target;
+    console.log(name, value);
+  };
 
-//     }
-//   });
-// });
-// export default Filters;
+  return (
+    <div name="sortOptionsOrder" value={ sortOption } onChange={ handleChange }>
+      <label>
+        Ascendente
+        <input
+          defaultChecked
+          type="radio"
+          value="ASC"
+          name="sortOptionsOrder"
+          data-testid="column-sort-input-asc"
+        />
+      </label>
+
+      <label>
+        Descendente
+        <input
+          type="radio"
+          value="DESC"
+          name="sortOptionsOrder"
+          data-testid="column-sort-input-desc"
+        />
+      </label>
+      <button
+        type="button"
+        onClick={ chooseOrdination }
+        data-testid="column-sort-button"
+      >
+        Ordernar
+      </button>
+    </div>
+  );
+}
+export default Filters;

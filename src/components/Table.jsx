@@ -1,10 +1,12 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import MyContext from '../contexts/MyContext';
+import Filters from './Filters';
 
 function Table() {
   const { data, inputName, setInputName, sizeFilter,
     columFilter, number, setNumber, setSizeFilter,
-    setColumFilter, optionsSelect, setOptionSelect } = useContext(MyContext);
+    setColumFilter, optionsSelect, setOptionSelect,
+  } = useContext(MyContext);
 
   const [initialStateApi, setInitialApi] = useState([]);
   const [filtersApplied, setFiltersApplied] = useState([]);
@@ -68,7 +70,7 @@ function Table() {
     });
 
     setInitialApi([...newApi]);
-  }, [optionsSelect, filtersApplied, data, setInitialApi]);
+  }, [optionsSelect, filtersApplied, data, setInitialApi, setFiltersApplied]);
 
   const toggleFilter = () => {
     setOptionSelect(optionsSelect.filter((option) => option !== columFilter));
@@ -147,7 +149,7 @@ function Table() {
             onChange={ handleChange }
           />
         </label>
-
+        <Filters />
         <button
           type="button"
           data-testid="button-filter"
@@ -203,7 +205,7 @@ function Table() {
               .filter((item) => item.name.toLowerCase().includes(inputName))
               .map((e) => (
                 <tr key={ e.name }>
-                  <td>{ e.name }</td>
+                  <td data-testid="planet-name">{ e.name }</td>
                   <td>{ e.rotation_period }</td>
                   <td>{ e.orbital_period }</td>
                   <td>{ e.diameter }</td>
