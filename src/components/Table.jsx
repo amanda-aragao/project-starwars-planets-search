@@ -3,9 +3,9 @@ import MyContext from '../contexts/MyContext';
 import Filters from './Filters';
 
 function Table() {
-  const { data, inputName, setInputName, sizeFilter,
-    columFilter, number, setNumber, setSizeFilter,
-    setColumFilter, optionsSelect, setOptionSelect,
+  const { data, inputName, sizeFilter,
+    columFilter, number,
+    setColumFilter, optionsSelect, setOptionSelect, handleChange,
   } = useContext(MyContext);
 
   const [initialStateApi, setInitialApi] = useState([]);
@@ -18,21 +18,6 @@ function Table() {
   useEffect(() => {
     setColumFilter(optionsSelect[0]);
   }, [optionsSelect, setColumFilter]);
-
-  const handleChange = ({ target }) => {
-    const { name, value } = target;
-    switch (name) {
-    case 'inputName':
-      return setInputName(value);
-    case 'columFilter':
-      return setColumFilter(value);
-    case 'sizeFilter':
-      return setSizeFilter(value);
-    case 'number':
-      return setNumber(value);
-    default:
-    }
-  };
 
   const deleteOption = () => {
     setOptionSelect(['population', 'orbital_period',

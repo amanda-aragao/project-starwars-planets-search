@@ -15,6 +15,21 @@ function Provider({ children }) {
   const [sortOption, setSortOption] = useState('ASC');
   const [filtersApplied, setFiltersApplied] = useState([]);
 
+  const handleChange = ({ target }) => {
+    const { name, value } = target;
+    switch (name) {
+    case 'inputName':
+      return setInputName(value);
+    case 'columFilter':
+      return setColumFilter(value);
+    case 'sizeFilter':
+      return setSizeFilter(value);
+    case 'number':
+      return setNumber(value);
+    default:
+    }
+  };
+
   const chooseOrdination = useCallback(() => {
     if (sortOption.includes('ASC')) {
       const notExist = data.filter((e) => e[columFilter] === 'unknown');
@@ -63,6 +78,7 @@ function Provider({ children }) {
       setSortOption,
       chooseOrdination,
       setFiltersApplied,
+      handleChange,
     }
   ), [data,
     loading,
