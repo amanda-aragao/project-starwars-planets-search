@@ -13,6 +13,7 @@ function Provider({ children }) {
   const [optionsSelect, setOptionSelect] = useState(['population', 'orbital_period',
     'diameter', 'rotation_period', 'surface_water']);
   const [sortOption, setSortOption] = useState('ASC');
+  const [orderFilter, setOrderFilter] = useState('population');
   const [filtersApplied, setFiltersApplied] = useState([]);
 
   const handleChange = ({ target }) => {
@@ -26,26 +27,28 @@ function Provider({ children }) {
       return setSizeFilter(value);
     case 'number':
       return setNumber(value);
+    case 'orderFilter':
+      return setOrderFilter(value);
     default:
     }
   };
 
   const chooseOrdination = useCallback(() => {
     if (sortOption.includes('ASC')) {
-      const notExist = data.filter((e) => e[columFilter] === 'unknown');
-      const exist = data.filter((e) => e[columFilter] !== 'unknown');
+      const notExist = data.filter((e) => e[orderFilter] === 'unknown');
+      const exist = data.filter((e) => e[orderFilter] !== 'unknown');
       const arrayAsyc = exist
-        .sort((a, b) => Number(a[columFilter] - Number(b[columFilter])));
+        .sort((a, b) => Number(a[orderFilter] - Number(b[orderFilter])));
       setData([...arrayAsyc, ...notExist]);
-      setFilters([...filtersApplied, { columFilter, sortOption }]);
+      setFilters([...filtersApplied, { orderFilter, sortOption }]);
     } else if (sortOption.includes('DESC')) {
-      const notExist = data.filter((e) => e[columFilter] === 'unknown');
-      const exist = data.filter((e) => e[columFilter] !== 'unknown');
-      const arrayAsync = exist.sort((a, b) => Number(b[columFilter] - a[columFilter]));
+      const notExist = data.filter((e) => e[orderFilter] === 'unknown');
+      const exist = data.filter((e) => e[orderFilter] !== 'unknown');
+      const arrayAsync = exist.sort((a, b) => Number(b[orderFilter] - a[orderFilter]));
       setData([...arrayAsync, ...notExist]);
-      setFilters([...filtersApplied, { columFilter, sortOption }]);
+      setFilters([...filtersApplied, { orderFilter, sortOption }]);
     }
-  }, [data, columFilter, sortOption, filtersApplied]);
+  }, [data, orderFilter, sortOption, filtersApplied]);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -79,6 +82,8 @@ function Provider({ children }) {
       chooseOrdination,
       setFiltersApplied,
       handleChange,
+      orderFilter,
+      setOrderFilter,
     }
   ), [data,
     loading,
@@ -96,7 +101,10 @@ function Provider({ children }) {
     setOptionSelect,
     sortOption,
     setSortOption,
-    chooseOrdination]);
+    chooseOrdination,
+    orderFilter,
+    setOrderFilter,
+  ]);
   return (
     <MyContext.Provider value={ ContextValues }>
       {children}

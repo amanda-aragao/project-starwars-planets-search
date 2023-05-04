@@ -47,6 +47,7 @@ test('Teste os elementos na tela e seus filtros', async () => {
 
   const buttonRemFilter = await screen.getByRole('button', {
     name: /excluir/i});
+  expect(buttonRemFilter).toBeInTheDocument();
   
   const table = await screen.getByRole('columnheader', {name: /name/i})
   expect(table).toBeInTheDocument();
@@ -65,10 +66,6 @@ test('Teste se o ao digitar no input name o nome do planeta é filtrado', async 
 
   userEvent.type(nameInput, 'Tat');
   expect(nameInput).toHaveValue('Tat');
-  // await waitFor(() => {
-  //   expect(screen.getAllByRole('cell')).toHaveLength(130);
-  // })
-
 })
 
 test('Teste os filtros de ordenagem Ascendente e Descendente ',() => {
@@ -140,6 +137,11 @@ test('Teste se os filtros estão sendo aplicados e removidos corretamente', asyn
   userEvent.click(buttonApplyFilter);
   expect(column).not.toHaveValue('population')
 
+  const planetName1 = screen.getAllByTestId('planet-name');
+  expect(planetName1.length).toEqual(7);
+  const filterApplicaded = screen.getAllByTestId('filter');
+  expect(filterApplicaded.length).toEqual(1)
+
 
   userEvent.selectOptions(column, 'rotation_period');
   expect(column).toHaveValue('rotation_period');
@@ -151,6 +153,15 @@ test('Teste se os filtros estão sendo aplicados e removidos corretamente', asyn
   userEvent.click(buttonApplyFilter);
   expect(column).not.toHaveValue('rotation_period');
 
+  // const planetName2 = screen.getAllByTestId('planet-name');
+
+  // expect(planetName2.length).toEqual(1);
+  // expect(filterApplicaded.length).toEqual(2)
+
+  // userEvent.click(buttonRemoveAllFilters);
+  // expect(filterApplicaded.length).toEqual(0)
+
+
   userEvent.selectOptions(column, 'orbital_period');
   expect(column).toHaveValue('orbital_period');
   userEvent.selectOptions(size, 'menor que');
@@ -160,6 +171,11 @@ test('Teste se os filtros estão sendo aplicados e removidos corretamente', asyn
   expect(value).toHaveValue(400);
   userEvent.click(buttonApplyFilter);
   expect(column).not.toHaveValue('orbital_period');
+
+  // const planetName3 = screen.getAllByTestId('planet-name');
+  // expect(planetName3.length).toEqual(7);
+  // const filterApplicaded = screen.getAllByTestId('filter');
+  // expect(filterApplicaded.length).toEqual(1)
  
   const filter1= screen.getByText(/population maior que 1000000/i)
   const filter2 = screen.getByText(/orbital_period menor que 400/i);
@@ -168,14 +184,16 @@ test('Teste se os filtros estão sendo aplicados e removidos corretamente', asyn
   expect(filter1).toBeInTheDocument();
   expect(filter2).toBeInTheDocument();
   expect(filter3).toBeInTheDocument();
+  
+      userEvent.click(buttonRemoveAllFilters);
+    expect(filter1).not.toBeInTheDocument();
 
-
-    userEvent.click(buttonRemFilter);
-
-  expect(filter1).not.toBeInTheDocument();
   // expect(filter2).not.toBeInTheDocument()
 });
 
+test('',() => {
+
+})
 
 });
 

@@ -3,7 +3,7 @@ import MyContext from '../contexts/MyContext';
 
 function Filters() {
   const { chooseOrdination, sortOption, handleChange,
-    setSortOption, columFilter, optionsSelect, setColumFilter } = useContext(MyContext);
+    setSortOption, optionsSelect, setColumFilter, orderFilter } = useContext(MyContext);
 
   useEffect(() => {
     setColumFilter(optionsSelect[0]);
@@ -15,9 +15,9 @@ function Filters() {
         Ordene:
         <select
           data-testid="column-sort"
-          name="columSort"
+          name="orderFilter"
           onChange={ handleChange }
-          value={ columFilter }
+          value={ orderFilter }
         >
           <option value="population">population</option>
           <option value="orbital_period">orbital_period</option>
