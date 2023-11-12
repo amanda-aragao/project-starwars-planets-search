@@ -22,3 +22,8 @@ text-align: center;
 padding: 8px;
 border: 1px solid #ddd;
 `;
+
+export const TableContainer = styled.div`
+width: 50%; /* Defina a largura desejada */
+ 
+`;

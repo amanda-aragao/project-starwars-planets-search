@@ -230,6 +230,7 @@ function Table() {
           ))}
         </tbody>
       </StyledTable>
+
     </FormContainer>
   );
 }
