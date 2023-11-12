@@ -1,12 +1,24 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import MyContext from '../contexts/MyContext';
 import Filters from './Filters';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {
+  FormContainer,
+  StyledForm,
+  StyledButton,
+  StyledInput,
+  StyledSelect,
+} from '../style/FormStyle';
+
+import {
+  StyledTable,
+  StyledTh,
+  StyledTd } from '../style/TableStyle';
 
 function Table() {
   const { data, inputName, sizeFilter,
-    columFilter, number,
-    setColumFilter, optionsSelect, setOptionSelect, handleChange,
-  } = useContext(MyContext);
+    columFilter, number, setColumFilter, optionsSelect,
+    setOptionSelect, handleChange } = useContext(MyContext);
 
   const [initialStateApi, setInitialApi] = useState([]);
   const [filtersApplied, setFiltersApplied] = useState([]);
@@ -37,20 +49,17 @@ function Table() {
     filterApi.forEach((filter) => {
       if (filter.sizeFilter === 'maior que') {
         newApi = newApi
-          .filter((item) => Number(item[filter.columFilter])
-          > Number(filter.number));
+          .filter((item) => Number(item[filter.columFilter]) > Number(filter.number));
       }
 
       if (filter.sizeFilter === 'menor que') {
         newApi = newApi
-          .filter((item) => Number(item[filter.columFilter])
-          < Number(filter.number));
+          .filter((item) => Number(item[filter.columFilter]) < Number(filter.number));
       }
 
       if (filter.sizeFilter === 'igual a') {
         newApi = newApi
-          .filter((item) => Number(item[filter.columFilter])
-          === Number(filter.number));
+          .filter((item) => Number(item[filter.columFilter]) === Number(filter.number));
       }
     });
 
@@ -83,134 +92,145 @@ function Table() {
   };
 
   return (
-    <div>
-      <form>
-        <label htmlFor="inputName">
+    <FormContainer>
+      <StyledForm>
+        <label htmlFor="inputName" className="title">
           Planeta
-          <input
+          <StyledInput
             type="text"
             name="inputName"
             value={ inputName }
             data-testid="name-filter"
             onChange={ handleChange }
+            className="form-control"
           />
         </label>
-        <label>
+        {' '}
+        <label className="title">
           Coluna
-          <select
+          <StyledSelect
             data-testid="column-filter"
             name="columFilter"
             onChange={ handleChange }
             value={ columFilter }
+            className="form-control"
           >
-            {
-              optionsSelect.map((e) => (
-                <option key={ e } value={ e }>{e}</option>
-              ))
-            }
-          </select>
+            {optionsSelect.map((e) => (
+              <option key={ e } value={ e }>
+                {e}
+              </option>
+            ))}
+          </StyledSelect>
         </label>
-
-        <label>
+        {' '}
+        <label htmlFor="sizeFilter" className="title">
           Operador
-          <select
+          <StyledSelect
             name="sizeFilter"
             data-testid="comparison-filter"
             onChange={ handleChange }
             value={ sizeFilter }
+            className="form-control"
           >
             <option value="maior que">maior que</option>
             <option value="menor que">menor que</option>
             <option value="igual a">igual a</option>
-          </select>
+          </StyledSelect>
         </label>
-        <label>
+        <label htmlFor="number" className="title">
           Valor
-          <input
+          <StyledInput
             type="number"
             name="number"
             value={ number }
             data-testid="value-filter"
             onChange={ handleChange }
+            className="form-control"
           />
         </label>
         <Filters />
-        <button
-          type="button"
-          data-testid="button-filter"
-          onClick={ toggleFilter }
-        >
-          Aplicar filtro
-        </button>
-        <button
-          type="button"
-          data-testid="button-remove-filters"
-          onClick={ deleteOption }
-        >
-          Excluir filtros
-        </button>
-        {
-          filtersApplied.length > 0 && filtersApplied.map((e) => (
-            <div data-testid="filter" key={ e.columFilter }>
 
-              <p>
-                {`${e.columFilter} ${e.sizeFilter} ${e.number}`}
-              </p>
-              <button
+        <div
+          style={ { display: 'flex',
+            justifyContent: 'center',
+            marginTop: '10px',
+            gap: '15px' } }
+        >
+          <StyledButton
+            type="button"
+            data-testid="button-filter"
+            onClick={ toggleFilter }
+            className="btn btn-primary"
+          >
+            Aplicar filtro
+          </StyledButton>
+
+          <StyledButton
+            type="button"
+            data-testid="button-remove-filters"
+            onClick={ deleteOption }
+            className="btn btn-danger"
+          >
+            Excluir filtros
+          </StyledButton>
+        </div>
+        {filtersApplied.length > 0
+          && filtersApplied.map((e) => (
+            <div data-testid="filter" key={ e.columFilter }>
+              <p>{`${e.columFilter} ${e.sizeFilter} ${e.number}`}</p>
+              <StyledButton
                 type="button"
-                onClick={ () => { deleteOptionSelection(e.columFilter); } }
+                onClick={ () => {
+                  deleteOptionSelection(e.columFilter);
+                } }
+                className="btn btn-secondary"
               >
                 Excluir
-              </button>
+              </StyledButton>
             </div>
-          ))
-        }
-      </form>
-      <table>
-        <thead>
+
+          ))}
+      </StyledForm>
+      <StyledTable className="table">
+        <thead className="thead-dark">
           <tr>
-            <th>Name</th>
-            <th>Rotacion Period</th>
-            <th>Orbital Period</th>
-            <th>Diameter</th>
-            <th>Climate</th>
-            <th>Gravity</th>
-            <th>Terrain</th>
-            <th>Surface Water</th>
-            <th>Population</th>
-            <th>Films</th>
-            <th>Created</th>
-            <th>Edited</th>
-            <th>URL</th>
+            <StyledTh>Name</StyledTh>
+            <StyledTh>Rotacion Period</StyledTh>
+            <StyledTh>Orbital Period</StyledTh>
+            <StyledTh>Diameter</StyledTh>
+            <StyledTh>Climate</StyledTh>
+            <StyledTh>Gravity</StyledTh>
+            <StyledTh>Terrain</StyledTh>
+            <StyledTh>Surface Water</StyledTh>
+            <StyledTh>Population</StyledTh>
+            <StyledTh>Films</StyledTh>
+            <StyledTh>Created</StyledTh>
+            <StyledTh>Edited</StyledTh>
+            <StyledTh>Url</StyledTh>
           </tr>
         </thead>
         <tbody>
-          {
-            initialStateApi
-              .filter((item) => item.name.toLowerCase().includes(inputName.toLowerCase()))
-              .map((e) => (
-                <tr key={ e.name }>
-                  <td data-testid="planet-name">{ e.name }</td>
-                  <td>{ e.rotation_period }</td>
-                  <td>{ e.orbital_period }</td>
-                  <td>{ e.diameter }</td>
-                  <td>{ e.climate }</td>
-                  <td>{ e.gravity }</td>
-                  <td>{ e.terrain }</td>
-                  <td>{ e.surface_water }</td>
-                  <td>{ e.population }</td>
-                  <td>{ e.films }</td>
-                  <td>{ e.created }</td>
-                  <td>{ e.edited }</td>
-                  <td>{ e.url }</td>
-                </tr>
-              ))
-          }
+          {initialStateApi.map((e) => (
+            <tr key={ e.name }>
+              <StyledTd data-testid="planet-name">{e.name}</StyledTd>
+              <StyledTd>{e.rotation_period}</StyledTd>
+              <StyledTd>{e.orbital_period}</StyledTd>
+              <StyledTd>{e.diameter}</StyledTd>
+              <StyledTd>{e.climate}</StyledTd>
+              <StyledTd>{e.gravity}</StyledTd>
+              <StyledTd>{e.terrain}</StyledTd>
+              <StyledTd>{e.surface_water}</StyledTd>
+              <StyledTd>{e.population}</StyledTd>
+              <StyledTd>{e.films}</StyledTd>
+              <StyledTd>{e.created}</StyledTd>
+              <StyledTd>{e.edited}</StyledTd>
+              <StyledTd>{e.url}</StyledTd>
 
+            </tr>
+          ))}
         </tbody>
-
-      </table>
-    </div>
+      </StyledTable>
+    </FormContainer>
   );
 }
 export default Table;

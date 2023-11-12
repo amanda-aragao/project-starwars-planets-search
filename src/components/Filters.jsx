@@ -1,34 +1,44 @@
 import React, { useContext, useEffect } from 'react';
 import MyContext from '../contexts/MyContext';
+import { StyledButton, StyledSelect } from '../style/FormStyle';
 
 function Filters() {
-  const { chooseOrdination, sortOption, handleChange,
-    setSortOption, optionsSelect, setColumFilter, orderFilter } = useContext(MyContext);
+  const {
+    chooseOrdination,
+    // sortOption,
+    handleChange,
+    setSortOption,
+    optionsSelect,
+    setColumFilter,
+    orderFilter,
+  } = useContext(MyContext);
 
   useEffect(() => {
     setColumFilter(optionsSelect[0]);
   }, [optionsSelect, setColumFilter]);
 
   return (
-    <>
-      <label>
+    <div style={ { marginTop: '10px', display: 'flex', alignItems: 'center' } }>
+      <label style={ { marginRight: '10px' } } className="title">
         Ordene:
-        <select
+        <StyledSelect
           data-testid="column-sort"
           name="orderFilter"
           onChange={ handleChange }
           value={ orderFilter }
         >
-          <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
-        </select>
+          {optionsSelect.map((value) => (
+            <option key={ value } value={ value }>
+              {value}
+            </option>
+          ))}
+        </StyledSelect>
       </label>
-      <div name="sortOptionsOrder" value={ sortOption } onChange={ handleChange }>
-        <label>
+
+      <div style={ { display: 'flex', alignItems: 'center' } }>
+        <label style={ { marginRight: '10px' } } className="title">
           Ascendente
+          {' '}
           <input
             type="radio"
             value="ASC"
@@ -38,8 +48,9 @@ function Filters() {
           />
         </label>
 
-        <label>
+        <label style={ { marginRight: '10px' } } className="title">
           Descendente
+          {' '}
           <input
             type="radio"
             value="DESC"
@@ -48,15 +59,18 @@ function Filters() {
             onChange={ ({ target }) => setSortOption(target.value) }
           />
         </label>
-        <button
+
+        <StyledButton
           type="button"
           onClick={ chooseOrdination }
           data-testid="column-sort-button"
+          className="btn btn-primary"
         >
-          Ordernar
-        </button>
+          Ordenar
+        </StyledButton>
       </div>
-    </>
+    </div>
   );
 }
+
 export default Filters;

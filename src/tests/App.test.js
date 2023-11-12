@@ -19,11 +19,11 @@ describe('Teste a aplicação', () => {
   });
 
 test('Teste os elementos na tela e seus filtros', async () => {
-  const loadingMesage = screen.getByText(/carregando.../i);
-  expect(loadingMesage).toBeInTheDocument();
+  const loadingMessage = screen.getByText(/carregando.../i);
+  expect(loadingMessage).toBeInTheDocument();
 
   await waitFor(() => {
-    expect(loadingMesage).not.toBeInTheDocument();
+    expect(loadingMessage).not.toBeInTheDocument();
   })
   const nameInput = screen.getByTestId('name-filter');
   expect(screen.getByTestId('name-filter')).toBeInTheDocument();
@@ -152,15 +152,6 @@ test('Teste se os filtros estão sendo aplicados e removidos corretamente', asyn
   expect(value).toHaveValue(18);
   userEvent.click(buttonApplyFilter);
   expect(column).not.toHaveValue('rotation_period');
-
-  // const planetName2 = screen.getAllByTestId('planet-name');
-
-  // expect(planetName2.length).toEqual(1);
-  // expect(filterApplicaded.length).toEqual(2)
-
-  // userEvent.click(buttonRemoveAllFilters);
-  // expect(filterApplicaded.length).toEqual(0)
-
 
   userEvent.selectOptions(column, 'orbital_period');
   expect(column).toHaveValue('orbital_period');
